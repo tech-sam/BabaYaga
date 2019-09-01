@@ -40,8 +40,7 @@ def dumpSchema(request):
         userName = body['userName']
         password = body['password']
         schemaName = body['schemaName']
-        # return pgDump(hostName, port, dbName, userName, password, schemaName)
-        return getSchemas(hostName, port, dbName, userName, password, schemaName)
+        return pgDump(hostName, port, dbName, userName, password, schemaName)
         # return JsonResponse({'completed': 'true'})
 
     except e as Exception:
@@ -87,6 +86,11 @@ def getSchemas(request):
             dicts['key'] = i
             dicts['schemaName'] = ''.join(
                 e for e in schema_records[i] if e.isalnum())
+            dicts['hostName'] = hostName
+            dicts['port'] = port
+            dicts['databaseName'] = dbName
+            dicts['userName'] = userName
+            dicts['password'] = password
             schema_list.append(dicts)
 
     except (Exception, psycopg2.Error) as error:
