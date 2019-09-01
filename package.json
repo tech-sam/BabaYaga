@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./babayaga/frontend/src/index.js --output ./babayaga/frontend/static/frontend/main.js",
+    "dev": "webpack --mode development --watch ./babayaga/frontend/src/index.js --output ./babayaga/frontend/static/frontend/main.js",
     "build": "webpack --mode production ./babayaga/frontend/src/index.js --output ./babayaga/frontend/static/frontend/main.js"
   },
   "keywords": [],
