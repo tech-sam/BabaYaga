@@ -1,9 +1,13 @@
 import json
 from subprocess import PIPE, Popen
 import shlex
+import psycopg2
+
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
+
 
 from babayaga_app.models import DatabseServerProps
 from rest_framework import viewsets, permissions
@@ -36,17 +40,54 @@ def dumpSchema(request):
         userName = body['userName']
         password = body['password']
         schemaName = body['schemaName']
-        pgDump(hostName, port, dbName, userName, password, schemaName)
-        return HttpResponse("Latest Data Fetched from Stack Overflow")
+        # return pgDump(hostName, port, dbName, userName, password, schemaName)
+        return getSchemas(hostName, port, dbName, userName, password, schemaName)
+        # return JsonResponse({'completed': 'true'})
+
     except e as Exception:
         return HttpResponse(f"Failed {e}")
 
 
 def pgDump(host_name, port, database_name, user_name, database_password, schema_name):
-    print("inside pdDump")
-    print(host_name+" "+port)
-    command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} --file majani-life.sql'\
+
+    command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} --file {4}.sql'\
         .format(host_name, database_name, user_name, port, schema_name)
-    print(command)
     p = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    return p.communicate('{}\n'.format(database_password))
+    (output, err) = p.communicate()
+    p_status = p.wait()
+    print(p_status)
+    print(output)
+    return JsonResponse({'completed': 'true'})
+
+
+def getSchemas(host_name, port, database_name, user_name, database_password, schema_name):
+    try:
+        connection = psycopg2.connect(user=user_name,
+                                      password=database_password,
+                                      host=host_name,
+                                      port=port,
+                                      database=database_name)
+        cursor = connection.cursor()
+        postgreSQL_select_Query = "select schema_name from information_schema.schemata WHERE schema_name !~* 'pg_.*|.*information_schema.*'"
+        cursor.execute(postgreSQL_select_Query)
+        print("Selecting rows from information_schema using cursor.fetchall")
+        schema_records = cursor.fetchall()
+        total_schemas = len(schema_records)
+        schema_list = []
+        keys = range(total_schemas)
+        for i in keys:
+            dicts = {}
+            dicts['key'] = i
+            dicts['schemaName'] = ''.join(
+                e for e in schema_records[i] if e.isalnum())
+            schema_list.append(dicts)
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while fetching data from PostgreSQL", error)
+    finally:
+        # closing database connection.
+        if(connection):
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+            return JsonResponse(schema_list, safe=False)
