@@ -60,13 +60,20 @@ def pgDump(host_name, port, database_name, user_name, database_password, schema_
     return JsonResponse({'completed': 'true'})
 
 
-def getSchemas(host_name, port, database_name, user_name, database_password, schema_name):
+def getSchemas(request):
     try:
-        connection = psycopg2.connect(user=user_name,
-                                      password=database_password,
-                                      host=host_name,
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        hostName = body['hostName']
+        port = body['port']
+        dbName = body['databaseName']
+        userName = body['userName']
+        password = body['password']
+        connection = psycopg2.connect(user=userName,
+                                      password=password,
+                                      host=hostName,
                                       port=port,
-                                      database=database_name)
+                                      database=dbName)
         cursor = connection.cursor()
         postgreSQL_select_Query = "select schema_name from information_schema.schemata WHERE schema_name !~* 'pg_.*|.*information_schema.*'"
         cursor.execute(postgreSQL_select_Query)
