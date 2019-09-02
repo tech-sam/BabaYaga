@@ -84,8 +84,11 @@ def pgDump(params, pgRestoreParams):
     user_name = params['userName']
     password = params['password']
     schema_name = params['schemaName']
-    command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} -Fc -f {4}.dmp'\
-        .format(host_name, database_name, user_name, port, schema_name)
+    # command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} -Fc -f {4}.dmp'\
+    #     .format(host_name, database_name, user_name, port, schema_name)
+    command = 'pg_dump  --dbname=postgresql://{2}:{5}@{0}:{3}/{1}  -n {4} -Fc -f {4}.dmp'\
+        .format(host_name, database_name, user_name, port, schema_name, password)
+
     p = Popen(command, shell=True, stdin=PIPE,
               stdout=PIPE, stderr=PIPE, encoding='utf8')
     (outs, errs) = p.communicate('{}\n'.format(password))
