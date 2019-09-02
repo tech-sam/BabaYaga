@@ -117,8 +117,11 @@ def restore_table(params):
     files = os.listdir(cwd)
     print("Files in %r: %s" % (cwd, files))
 
-    command = 'pg_restore -h {0} -d {1} -U {2} -p {3} {4}.dmp'\
-              .format(host_name, database_name, user_name, port, file)
+    # command = 'pg_restore -h {0} -d {1} -U {2} -p {3} {4}.dmp'\
+    #           .format(host_name, database_name, user_name, port, file)
+
+    command = 'pg_restore --dbname=postgresql://{2}:{5}@{0}:{3}/{1} {4}.dmp'\
+              .format(host_name, database_name, user_name, port, file, database_password)
 
     command = shlex.split(command)
 
