@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 import os
 import boto3
+
 from botocore.exceptions import NoCredentialsError
 
 
@@ -126,12 +127,22 @@ def restore_table(params):
 
 
 def uploadToS3(file):
-    ACCESS_KEY = 'AKIAILGKMHATWO6VMFNQ'
-    SECRET_KEY = '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'
-    bucket = 'drobl-images'
+    ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY')
+    SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
+    bucket = os.environ.get('AWS_S3_BUCKET')
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
-    print("coming to s3-----")
+    print("-----coming to s3-----")
+    print(os.environ)
+    print('---ACCESS_KEY---')
+    print(os.environ.get('AWS_ACCESS_KEY'))
+
+    print('---SECRET_KEY---')
+    print(os.environ.get('AWS_SECRET_KEY'))
+
+    print('---AWS_S3_BUCKET---')
+    print(os.environ.get('AWS_S3_BUCKET'))
+
     try:
         s3.upload_file(file, bucket, file)
         print("Upload Successful")
