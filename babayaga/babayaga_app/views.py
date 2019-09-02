@@ -3,6 +3,10 @@ from subprocess import PIPE, Popen
 import shlex
 import psycopg2
 from datetime import datetime
+from pathlib import Path
+import os
+import boto3
+from botocore.exceptions import NoCredentialsError
 
 
 from django.shortcuts import render
@@ -48,6 +52,8 @@ def dumpSchema(request):
                 pgDumpParams['userName'] = sourceDbParams['userName']
                 pgDumpParams['password'] = sourceDbParams['password']
                 pgDumpParams['schemaName'] = sourceDbParams['schemaName']
+                pgDumpParams['restoreSchema'] = sourceDbParams['restoreSchema']
+                pgDumpParams['s3Upload'] = sourceDbParams['s3Upload']
 
             if bool(dbProps.get("destinationDb")):
                 destinationDbparams = dbProps.get("destinationDb")
@@ -63,51 +69,79 @@ def dumpSchema(request):
         print("----pgDumpParams-----")
         print(pgDumpParams)
         # return JsonResponse({'completed': 'true'})
-        return pgDump(pgDumpParams)
+        return pgDump(pgDumpParams, pgRestoreParams)
 
     except e as Exception:
         return HttpResponse(f"Failed {e}")
 
 
-def pgDump(params):
+def pgDump(params, pgRestoreParams):
 
     host_name = params['hostName']
     port = params['port']
     database_name = params['databaseName']
     user_name = params['userName']
-    #password = params['password']
+    # password = params['password']
     schema_name = params['schemaName']
-
-    command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} --file {4}.sql'\
+    command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} -Fc -f {4}.dmp'\
         .format(host_name, database_name, user_name, port, schema_name)
     p = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     (output, err) = p.communicate()
     p_status = p.wait()
     print(p_status)
     print(output)
+    if(True == params['restoreSchema']):
+        restore_table(pgRestoreParams)
+    if(True == params['s3Upload']):
+        uploadToS3(schema_name+".dmp")
 
     return JsonResponse({'completed': 'true'})
 
 
 def restore_table(params):
-
+    print("----restore schema called----")
     host_name = params['hostName']
     port = params['port']
     database_name = params['databaseName']
     user_name = params['userName']
     database_password = params['password']
-    # Remove the '<' from the pg_restore command.
-    command = 'pg_restore -h {0} -d {1} -U {2} -p {3} /tmp/table.dmp'\
-              .format(host_name, database_name, user_name, port)
+    file = params['schemaName']
+    print("--path for restore file ----")
+    cwd = os.getcwd()
+    files = os.listdir(cwd)
+    print("Files in %r: %s" % (cwd, files))
 
-    # Use shlex to use a list of parameters in Popen instead of using the
-    # command as is.
+    command = 'pg_restore -h {0} -d {1} -U {2} {3}.dmp'\
+              .format(host_name, database_name, user_name, file)
+
     command = shlex.split(command)
 
     # Let the shell out of this (i.e. shell=False)
     p = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    (output, err) = p.communicate()
+    p_status = p.wait()
+    print(p_status)
+    print(output)
+    # p.communicate('{}\n'.format(database_password))
 
-    return p.communicate('{}\n'.format(database_password))
+
+def uploadToS3(file):
+    ACCESS_KEY = 'AKIAILGKMHATWO6VMFNQ'
+    SECRET_KEY = '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'
+    bucket = 'drobl-images'
+    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+                      aws_secret_access_key=SECRET_KEY)
+    print("coming to s3-----")
+    try:
+        s3.upload_file(file, bucket, file)
+        print("Upload Successful")
+        return True
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
 
 
 def getSchemas(request):
