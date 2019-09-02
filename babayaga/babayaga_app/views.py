@@ -2,6 +2,7 @@ import json
 from subprocess import PIPE, Popen
 import shlex
 import psycopg2
+from datetime import datetime
 
 
 from django.shortcuts import render
@@ -34,20 +35,48 @@ def dumpSchema(request):
 
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        hostName = body['hostName']
-        port = body['port']
-        dbName = body['databaseName']
-        userName = body['userName']
-        password = body['password']
-        schemaName = body['schemaName']
-        return pgDump(hostName, port, dbName, userName, password, schemaName)
+        # print(datetime.now(tz=None))
+        data = body['data']
+        pgDumpParams = {}
+        pgRestoreParams = {}
+        for dbProps in data:
+            if bool(dbProps.get("sourceDb")):
+                sourceDbParams = dbProps.get("sourceDb")
+                pgDumpParams['hostName'] = sourceDbParams['hostName']
+                pgDumpParams['port'] = sourceDbParams['port']
+                pgDumpParams['databaseName'] = sourceDbParams['databaseName']
+                pgDumpParams['userName'] = sourceDbParams['userName']
+                pgDumpParams['password'] = sourceDbParams['password']
+                pgDumpParams['schemaName'] = sourceDbParams['schemaName']
+
+            if bool(dbProps.get("destinationDb")):
+                destinationDbparams = dbProps.get("destinationDb")
+                pgRestoreParams['hostName'] = destinationDbparams['hostName']
+                pgRestoreParams['port'] = destinationDbparams['port']
+                pgRestoreParams['databaseName'] = destinationDbparams['databaseName']
+                pgRestoreParams['userName'] = destinationDbparams['userName']
+                pgRestoreParams['password'] = destinationDbparams['password']
+                pgRestoreParams['schemaName'] = destinationDbparams['schemaName']
+
+        print("----pgRestoreParams-----")
+        print(pgRestoreParams)
+        print("----pgDumpParams-----")
+        print(pgDumpParams)
         # return JsonResponse({'completed': 'true'})
+        return pgDump(pgDumpParams)
 
     except e as Exception:
         return HttpResponse(f"Failed {e}")
 
 
-def pgDump(host_name, port, database_name, user_name, database_password, schema_name):
+def pgDump(params):
+
+    host_name = params['hostName']
+    port = params['port']
+    database_name = params['databaseName']
+    user_name = params['userName']
+    #password = params['password']
+    schema_name = params['schemaName']
 
     command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} --file {4}.sql'\
         .format(host_name, database_name, user_name, port, schema_name)
@@ -56,7 +85,29 @@ def pgDump(host_name, port, database_name, user_name, database_password, schema_
     p_status = p.wait()
     print(p_status)
     print(output)
+
     return JsonResponse({'completed': 'true'})
+
+
+def restore_table(params):
+
+    host_name = params['hostName']
+    port = params['port']
+    database_name = params['databaseName']
+    user_name = params['userName']
+    database_password = params['password']
+    # Remove the '<' from the pg_restore command.
+    command = 'pg_restore -h {0} -d {1} -U {2} -p {3} /tmp/table.dmp'\
+              .format(host_name, database_name, user_name, port)
+
+    # Use shlex to use a list of parameters in Popen instead of using the
+    # command as is.
+    command = shlex.split(command)
+
+    # Let the shell out of this (i.e. shell=False)
+    p = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+
+    return p.communicate('{}\n'.format(database_password))
 
 
 def getSchemas(request):
