@@ -82,15 +82,17 @@ def pgDump(params, pgRestoreParams):
     port = params['port']
     database_name = params['databaseName']
     user_name = params['userName']
-    # password = params['password']
+    password = params['password']
     schema_name = params['schemaName']
     command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} -Fc -f {4}.dmp'\
         .format(host_name, database_name, user_name, port, schema_name)
-    p = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    (output, err) = p.communicate()
+    p = Popen(command, shell=True, stdin=PIPE,
+              stdout=PIPE, stderr=PIPE, encoding='utf8')
+    (outs, errs) = p.communicate('{}\n'.format(password))
+
     p_status = p.wait()
     print(p_status)
-    print(output)
+    print(outs)
     if(True == params['restoreSchema']):
         restore_table(pgRestoreParams)
     if(True == params['s3Upload']):
@@ -112,17 +114,18 @@ def restore_table(params):
     files = os.listdir(cwd)
     print("Files in %r: %s" % (cwd, files))
 
-    command = 'pg_restore -h {0} -d {1} -U {2} {3}.dmp'\
-              .format(host_name, database_name, user_name, file)
+    command = 'pg_restore -h {0} -d {1} -U {2} -p {3} {4}.dmp'\
+              .format(host_name, database_name, user_name, port, file)
 
     command = shlex.split(command)
 
     # Let the shell out of this (i.e. shell=False)
-    p = Popen(command, shell=False, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    (output, err) = p.communicate()
+    p = Popen(command, shell=False, stdin=PIPE,
+              stdout=PIPE, stderr=PIPE, encoding='utf8')
+    (outs, errs) = p.communicate('{}\n'.format(database_password))
     p_status = p.wait()
     print(p_status)
-    print(output)
+    print(outs)
     # p.communicate('{}\n'.format(database_password))
 
 
