@@ -3,6 +3,7 @@ import FormComponent from '../form/FormComponent';
 import SchemaComponent from '../schema/SchemaComponent';
 // import Axios from 'axios';
 import todosData from '../test-data/test';
+import SchemaListComponent from "../schema-list/SchemaListComponent"
 
 const formName = 'Destination'
 
@@ -39,9 +40,9 @@ class DestinationServer extends Component {
     }
 
     createSource(){
-        // const response = Axios.post('http://127.0.0.1:8000/', this.state, {
-        //     headers: { 'Content-Type': 'multipart/form-data' },
-        // })
+        const response = Axios.post('http://localhost:8000/api/schemas', this.state, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })
         this.response = todosData;
         this.schemas = this.response.map(schema => {
             return <SchemaComponent key={schema.id} schema={schema} />
@@ -50,7 +51,9 @@ class DestinationServer extends Component {
         console.log('res', this.response)
         this.forceUpdate()
     }
-
+    onDragOver(e) {
+        console.log(JSON.parse(e.dataTransfer.getData('data')));
+    }
     render() {
         if(!this.submited){
             return (
@@ -63,8 +66,8 @@ class DestinationServer extends Component {
             )
         }
         return (
-            <div>
-                {this.schemas}
+            <div onDragOver={(event)=>event.preventDefault()} onDrop={(e)=>this.onDragOver(e)}>
+                <SchemaListComponent schemaList={this.response}></SchemaListComponent>
             </div>
         )
 

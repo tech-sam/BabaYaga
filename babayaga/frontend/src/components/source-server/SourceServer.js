@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import FormComponent from '../form/FormComponent';
 import SchemaComponent from '../schema/SchemaComponent';
 import todosData from '../test-data/test';
-// import Axios from 'axios';
+import Axios from 'axios';
+import SchemaListComponent  from '../schema-list/SchemaListComponent'
 
 
 const formName = 'Source'
@@ -39,9 +40,9 @@ class SourceServer extends Component {
     }
 
     createSource(){
-        // const response = Axios.post('http://127.0.0.1:8000/', this.state, {
-        //     headers: { 'Content-Type': 'multipart/form-data' },
-        // })
+        const response = Axios.post('http://localhost:8000/api/schemas', this.state, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })
         this.response = todosData;
         this.schemas = this.response.map(schema => {
             return <SchemaComponent key={schema.id} schema={schema} />
@@ -66,7 +67,7 @@ class SourceServer extends Component {
         }
         return (
             <div>
-                {this.schemas}
+                <SchemaListComponent schemaList={this.response}></SchemaListComponent>
             </div>
         )
     }
