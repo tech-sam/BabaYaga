@@ -1,31 +1,19 @@
-import React, { Component } from "react";
-import "./Header.scss";
+import React, {Component} from "react"
+import './Header.scss'
 
-export class Header extends Component {
-  render() {
-    return (
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarTogglerDemo03"
-          aria-controls="navbarTogglerDemo03"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <a className="navbar-brand" href="#">
-          BabaYaga
-        </a>
+class HeaderComponent extends Component {
+    // constructor() {}
 
-        <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-          <ul className="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
-        </div>
-      </nav>
-    );
-  }
+    render() {
+        return (
+            <section className='container'>
+            <nav className="navbar navbar-text">
+                <div className="navbar-brand"></div>
+                BabaYaga
+            </nav>
+            </section>
+        )
+    }
 }
 
-export default Header;
+export default HeaderComponent
