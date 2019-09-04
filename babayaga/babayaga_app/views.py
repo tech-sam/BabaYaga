@@ -184,13 +184,16 @@ def getSchemas(request):
         print("Selecting rows from information_schema using cursor.fetchall")
         schema_records = cursor.fetchall()
         total_schemas = len(schema_records)
+        print("ccccccccccc")
+        print(total_schemas)
         schema_list = []
         keys = range(total_schemas)
         for i in keys:
             dicts = {}
             dicts['key'] = i
-            dicts['schemaName'] = ''.join(
-                e for e in schema_records[i] if e.isalnum())
+            #print(schema_records[i])
+            dicts['schemaName'] = ' '.join(schema_records[i])
+            print(' '.join(schema_records[i]))
             dicts['hostName'] = hostName
             dicts['port'] = port
             dicts['databaseName'] = dbName
