@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import FormComponent from '../form/FormComponent';
 import Axios from 'axios';
 import SchemaListComponent from "../schema-list/SchemaListComponent";
+import { getBaseUrl }  from "../../global";
 
 const formName = 'Destination'
 
@@ -12,7 +13,7 @@ class DestinationServer extends Component {
         super();
         this.state = {
             response: {},
-            loadingPage: true
+            loadingPage: false
         }
         this.formValue = {};
         this.submited = false;
@@ -33,7 +34,7 @@ class DestinationServer extends Component {
     }
 
     createSource(){
-     return   Axios.post('http://localhost:8000/api/schemas', this.formValue)
+     return   Axios.post(`${getBaseUrl()}api/schemas`, this.formValue)
         .then((response) => {
             this.setState({ response: response.data });
         });
@@ -49,7 +50,7 @@ class DestinationServer extends Component {
         const destinationDb = Object.assign({ schemaName: sourceDb.schemaName }, this.formValue);
         const requestData = { data: [{ sourceDb }, { destinationDb }] };
         this.setState({...this.state, loadingPage: true });
-        Axios.post('http://localhost:8000/api/dump-schema', requestData)
+        Axios.post(`${getBaseUrl()}api/dump-schema`, requestData)
             .then((response) => { 
                 return this.createSource();
             })
