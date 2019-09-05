@@ -25,7 +25,7 @@ SECRET_KEY = 'pws0tdd_(oiy=atmq9tdqcm(8#=%aw+3&ig5m#n(81ub$b^)&)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['babayaga.gthackathon.gr8hr.biz']
+ALLOWED_HOSTS = ['babayaga.gthackathon.gr8hr.biz','localhost','127.0.0.1']
 
 
 # Application definition
