@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
 
 function SchemaComponent(props) {
-
-    console.log('hjjh', props.schema);
     return (
-        <div>{props.schema.text}</div>
-    )
+        <div
+            className="card"
+            draggable
+            onDragStart={(ev, id) => ev.dataTransfer.setData('data', JSON.stringify(props.schema))}
+        >
+            {props.schema.schemaName}
+        </div>
+    );
 }
 
-export default SchemaComponent
+export default SchemaComponent;

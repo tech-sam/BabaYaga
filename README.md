@@ -5,3 +5,5 @@ pipenv shell
 pipenv install
 
 test commit
+
+python manage.py migrate

@@ -4,7 +4,7 @@ import './FormComponent.scss'
 function FormComponent(props) {
 
         return (
-            <form onSubmit={props.handleSubmit}>
+            <form onSubmit={(e) => { e.preventDefault(); props.handleSubmit(e)}}>
                 <div className="form-group border-bottom border-danger">
                     <legend className="form-header">{props.formName} Database Details</legend>
                 </div>
@@ -65,26 +65,13 @@ function FormComponent(props) {
                     <div className="form-group">
                     <label className="text-white">Password</label>
                         <input 
-                            type="text"
+                            type="password"
                             className="form-control"
                             value={props.data.password}
                             name="password"
                             aria-describedby="inputGroup-sizing-sm"
                             onChange={props.handleChange}
                             placeholder="Enter Password"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                    <label className="text-white">Schema Name</label>
-                        <input 
-                            type="text"
-                            className="form-control"
-                            value={props.data.schemaName}
-                            name="schemaName"
-                            aria-describedby="inputGroup-sizing-sm"
-                            onChange={props.handleChange}
-                            placeholder="Enter Schema Name"
                             required
                         />
                     </div>

@@ -2,10 +2,11 @@
   display: flex;
   color: #55ba33;
   font-size: 65px;
+  margin: auto;
 }
 
 .navbar-brand{
-  display: block;
+  display: none;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   // background: url('../static/final.jpeg') no-repeat;   
