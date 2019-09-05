@@ -65,7 +65,7 @@ class DestinationServer extends Component {
     onHideModal(val) {
        
         if (val && this.requestData) {
-            this.requestData.data[1].destinationDb.schemaName = val;
+            this.requestData.data[1].destinationDb.updatedSchemaName = val;
             this.setState({ ...this.state, showModal: false, loadingPage: true });
              this.httpClient.post(`${getBaseUrl()}api/dump-schema`, this.requestData)
                 .then((response) => {
