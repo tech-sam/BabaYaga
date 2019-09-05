@@ -64,6 +64,7 @@ def dumpSchema(request):
                 pgRestoreParams['userName'] = destinationDbparams['userName']
                 pgRestoreParams['password'] = destinationDbparams['password']
                 pgRestoreParams['schemaName'] = destinationDbparams['schemaName']
+                pgRestoreParams['updatedSchemaName'] = destinationDbparams['updatedSchemaName']
 
         print("----pgRestoreParams-----")
         print(pgRestoreParams)
@@ -112,6 +113,9 @@ def restore_table(params):
     user_name = params['userName']
     database_password = params['password']
     file = params['schemaName']
+    changedFileName = params['updatedSchemaName']
+	
+    os.rename(file,'career.guru99.txt')
     print("--path for restore file ----")
     cwd = os.getcwd()
     files = os.listdir(cwd)
@@ -121,7 +125,7 @@ def restore_table(params):
     #           .format(host_name, database_name, user_name, port, file)
 
     command = 'pg_restore -j 8 --dbname=postgresql://{2}:{5}@{0}:{3}/{1} {4}.dmp'\
-              .format(host_name, database_name, user_name, port, file, database_password)
+              .format(host_name, database_name, user_name, port, changedFileName, database_password)
 
     command = shlex.split(command)
 
