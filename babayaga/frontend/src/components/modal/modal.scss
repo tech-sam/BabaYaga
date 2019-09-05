@@ -1,0 +1,22 @@
+.modal-content{
+    background-color: black;
+    color: #fff;
+    border: #fff 1px solid;
+    .modal-title{
+        color:#E6FB04;
+    }
+    .btn-primary{
+        color: #fff;
+        background-color: #000;
+        border-color: #fff;
+    }
+    .modal-header {
+        border-bottom: 1px solid #FF0039 ;
+        button{
+            color: white;
+        }
+    }
+    .modal-footer{
+        border-top: 1px solid #FF0039;
+    }
+}
