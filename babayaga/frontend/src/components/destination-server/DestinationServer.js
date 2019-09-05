@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import FormComponent from '../form/FormComponent';
 import Axios from 'axios';
 import SchemaListComponent from "../schema-list/SchemaListComponent";
-import { getBaseUrl }  from "../../global";
+import { getBaseUrl } from "../../global";
+import CustomModal from "../modal/modal"
+
 
 const formName = 'Destination'
 
@@ -13,7 +15,8 @@ class DestinationServer extends Component {
         super();
         this.state = {
             response: {},
-            loadingPage: false
+            loadingPage: false,
+            showModal: false
         }
         this.formValue = {};
         this.submited = false;
@@ -21,6 +24,8 @@ class DestinationServer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.createSource = this.createSource.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
+        this.onHideModal = this.onHideModal.bind(this);
+        this.requestData = {};
     }
 
     handleChange(event) {
@@ -41,6 +46,7 @@ class DestinationServer extends Component {
 
     }
     onDragOver(e) {
+        this.openModal();
         let dragTransferObj = JSON.parse(e.dataTransfer.getData('data'));
         delete dragTransferObj.key;
         const sourceDb = Object.assign({
@@ -48,15 +54,28 @@ class DestinationServer extends Component {
             "s3Upload": false
         }, dragTransferObj);
         const destinationDb = Object.assign({ schemaName: sourceDb.schemaName }, this.formValue);
-        const requestData = { data: [{ sourceDb }, { destinationDb }] };
-        this.setState({...this.state, loadingPage: true });
-        Axios.post(`${getBaseUrl()}api/dump-schema`, requestData)
-            .then((response) => { 
-                return this.createSource();
-            })
-            .then(() => {
-                this.setState({ ...this.state, loadingPage: false });
-            });
+        this.requestData = { data: [{ sourceDb }, { destinationDb }] };
+       
+    }
+    openModal() {
+        this.setState({ ...this.state, showModal: true });
+    }
+    onHideModal(val) {
+       
+        if (val && this.requestData) {
+            this.requestData.data[1].destinationDb.schemaName = val;
+            this.setState({ ...this.state, showModal: false, loadingPage: true });
+            Axios.post(`${getBaseUrl()}api/dump-schema`, this.requestData)
+                .then((response) => {
+                    return this.createSource();
+                })
+                .then(() => {
+                    this.setState({ ...this.state, loadingPage: false });
+                });
+        }
+        else {
+            this.setState({ showModal: false });
+        }
     }
     render() {
         if (!this.submited) {
@@ -72,8 +91,10 @@ class DestinationServer extends Component {
         else {
             return (
                 <div onDragOver={(event) => event.preventDefault()} onDrop={(e) => this.onDragOver(e)}>
-                     <SchemaListComponent formName={formName} schemaList={this.state.response} isLoading={this.state.loadingPage}></SchemaListComponent>
+                    <SchemaListComponent formName={formName} formValue={this.formValue} schemaList={this.state.response} isLoading={this.state.loadingPage}></SchemaListComponent>
+                    <CustomModal show={this.state.showModal}  onHide={(val) => this.onHideModal(val)}></CustomModal>
                 </div>
+                
             );
         }
 

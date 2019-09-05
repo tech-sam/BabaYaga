@@ -15,6 +15,8 @@ function SchemaListComponent(props) {
       
         return [
             <div className="database-list">
+                <h4>Host Name: {props.formValue.hostName}</h4>
+                <h4>Database Name: {props.formValue.databaseName}</h4>
                 {props.schemaList.map((schema, key) => (
                     <SchemaComponent key={key} schema={schema}></SchemaComponent>
                 ))}

@@ -54,7 +54,7 @@ class SourceServer extends Component {
         else {
             return (
                 <div>
-                    <SchemaListComponent formName={formName} schemaList={this.state.response}></SchemaListComponent>
+                    <SchemaListComponent formName={formName} formValue={this.formValue} schemaList={this.state.response}></SchemaListComponent>
                 </div>
             );
         }
