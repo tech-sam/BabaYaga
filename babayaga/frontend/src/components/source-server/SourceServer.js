@@ -19,6 +19,9 @@ class SourceServer extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.createSource = this.createSource.bind(this);
+        this.httpClient = Axios.create();
+        this.httpClient.defaults.timeout = 1000;
+
     }
 
     handleChange(event) {

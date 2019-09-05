@@ -21,6 +21,9 @@ class DestinationServer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.createSource = this.createSource.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
+        this.httpClient = Axios.create();
+        this.httpClient.defaults.timeout = 6000000;
+
     }
 
     handleChange(event) {
@@ -34,7 +37,7 @@ class DestinationServer extends Component {
     }
 
     createSource(){
-     return   Axios.post(`${getBaseUrl()}api/schemas`, this.formValue)
+     return   this.httpClient.post(`${getBaseUrl()}api/schemas`, this.formValue)
         .then((response) => {
             this.setState({ response: response.data });
         });
@@ -50,7 +53,7 @@ class DestinationServer extends Component {
         const destinationDb = Object.assign({ schemaName: sourceDb.schemaName }, this.formValue);
         const requestData = { data: [{ sourceDb }, { destinationDb }] };
         this.setState({...this.state, loadingPage: true });
-        Axios.post(`${getBaseUrl()}api/dump-schema`, requestData)
+        this.httpClient.post(`${getBaseUrl()}api/dump-schema`, requestData)
             .then((response) => { 
                 return this.createSource();
             })
