@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import FormComponent from '../form/FormComponent';
 import Axios from 'axios';
-import SchemaListComponent  from '../schema-list/SchemaListComponent'
+import SchemaListComponent from '../schema-list/SchemaListComponent';
+import { getBaseUrl } from '../../global';
 
 
 const formName = 'Source'
@@ -31,7 +32,7 @@ class SourceServer extends Component {
     }
 
     createSource() {
-        Axios.post('http://localhost:8000/api/schemas', this.formValue)
+        Axios.post(`${getBaseUrl()}api/schemas`, this.formValue)
             .then((response) => {
                 this.setState({ response: response.data });
             });
