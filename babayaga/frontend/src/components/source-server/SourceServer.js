@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import FormComponent from '../form/FormComponent';
-import SchemaComponent from '../schema/SchemaComponent';
-import todosData from '../test-data/test';
 import Axios from 'axios';
 import SchemaListComponent  from '../schema-list/SchemaListComponent'
 
@@ -11,66 +9,55 @@ const formName = 'Source'
 class SourceServer extends Component {
     
     constructor() {
-        super()
+        super();
         this.state = {
-            hostName: "",
-            port:"",
-            databaseName: "",
-            userName: "",
-            password: "",
-            schemaName: ""
+            response: {}
         }
+        this.formValue = {};
         this.submited = false;
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.createSource = this.createSource.bind(this)
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.createSource = this.createSource.bind(this);
     }
 
     handleChange(event) {
-        const {name, value} = event.target
-        this.setState({
-            [name]: value
-        })
+        const { name, value } = event.target;
+        this.formValue[name] = value;
     }
 
     handleSubmit(e) {
-        console.log('SOURCE-DATA', this.state)
-        this.createSource()
-        e.preventDefault();
+        this.createSource();
+        this.submited = true;
     }
 
-    createSource(){
-        const response = Axios.post('http://localhost:8000/api/schemas', this.state, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        this.response = todosData;
-        this.schemas = this.response.map(schema => {
-            return <SchemaComponent key={schema.id} schema={schema} />
-        })
-        this.submited = true;
-        console.log('res', this.response)
-        this.forceUpdate()
+    createSource() {
+        Axios.post('http://localhost:8000/api/schemas', this.formValue)
+            .then((response) => {
+                this.setState({ response: response.data });
+            });
     }
 
     
 
     render() {
-        if(!this.submited){
+        if (!this.submited) {
             return (
                 <FormComponent
-                formName={formName}
-                handleChange={this.handleChange}
-                handleSubmit={this.handleSubmit}
-                data={this.state}
-                />    
-            )
+                    formName={formName}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
+                    data={this.state}
+                />
+            );
         }
-        return (
-            <div>
-                <SchemaListComponent schemaList={this.response}></SchemaListComponent>
-            </div>
-        )
+        else {
+            return (
+                <div>
+                    <SchemaListComponent formName={formName} schemaList={this.state.response}></SchemaListComponent>
+                </div>
+            );
+        }
     }
 }
 
-export default SourceServer
+export default SourceServer;

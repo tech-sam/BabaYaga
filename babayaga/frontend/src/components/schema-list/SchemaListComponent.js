@@ -1,15 +1,20 @@
 import React from "react";
 import SchemaComponent from "../schema/SchemaComponent";
 function SchemaListComponent(props) {
-  return (
-    <div className="container dropable">
-      {/* <h4>Server List</h4> */}
-      <div className="database-list">
-        {props.schemaList.map((schema, key) => (
-          <SchemaComponent key={key}  schema={schema}></SchemaComponent>
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <div>
+            <div className="form-group border-bottom border-danger">
+                <legend className="form-header">{props.formName} Schema List</legend>
+            </div>
+            <div className="container dropable">
+     
+                <div className="database-list">
+                    {props.schemaList.map((schema, key) => (
+                        <SchemaComponent key={key} schema={schema}></SchemaComponent>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 }
 export default SchemaListComponent;

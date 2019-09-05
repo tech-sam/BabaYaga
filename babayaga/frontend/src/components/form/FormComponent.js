@@ -75,19 +75,6 @@ function FormComponent(props) {
                             required
                         />
                     </div>
-                    <div className="form-group">
-                    <label className="text-white">Schema Name</label>
-                        <input 
-                            type="text"
-                            className="form-control"
-                            value={props.data.schemaName}
-                            name="schemaName"
-                            aria-describedby="inputGroup-sizing-sm"
-                            onChange={props.handleChange}
-                            placeholder="Enter Schema Name"
-                            required
-                        />
-                    </div>
                     <button className="btn btn-outline-light">Submit</button>
                 </form>
         )
