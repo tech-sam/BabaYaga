@@ -115,7 +115,7 @@ def restore_table(params):
     file = params['schemaName']
     changedFileName = params['updatedSchemaName']
 	
-    os.rename(file,'career.guru99.txt')
+    os.rename(file,changedFileName+".dmp")
     print("--path for restore file ----")
     cwd = os.getcwd()
     files = os.listdir(cwd)
