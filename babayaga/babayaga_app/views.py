@@ -86,6 +86,7 @@ def pgDump(params, pgRestoreParams):
     password = params['password']
     schema_name = params['schemaName']
     env_path = os.environ.get('DUMP_PATH')
+    pgRestoreParams['main_schema'] = schema_name
     print("env path "+env_path)
     path_to_file = ""
     if not env_path:
@@ -95,6 +96,7 @@ def pgDump(params, pgRestoreParams):
        print("coming to else")
        path_to_file = env_path+"/"+schema_name+".dmp" 
     print("path to file "+path_to_file)
+    pgRestoreParams.update(schemaName=path_to_file)
     # command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} -Fc -f {4}.dmp'\
     #     .format(host_name, database_name, user_name, port, schema_name)
     command = 'pg_dump  --dbname=postgresql://{2}:{5}@{0}:{3}/{1}  -n {4} -Fc -f {6}'\
@@ -127,6 +129,7 @@ def restore_table(params):
     database_name = params['databaseName']
     user_name = params['userName']
     database_password = params['password']
+    main_schema = params['main_schema']
     file = params['schemaName']
     changedSchemaName = params['updatedSchemaName']
     print("file to be restore pg_restore "+file)
@@ -139,7 +142,7 @@ def restore_table(params):
     # command = 'pg_restore -h {0} -d {1} -U {2} -p {3} {4}.dmp'\
     #           .format(host_name, database_name, user_name, port, file)
 
-    command = 'pg_restore -j 8 --dbname=postgresql://{2}:{5}@{0}:{3}/{1} {4}.dmp'\
+    command = 'pg_restore -j 8 --dbname=postgresql://{2}:{5}@{0}:{3}/{1} {4}'\
               .format(host_name, database_name, user_name, port, file, database_password)
 
     command = shlex.split(command)
@@ -154,7 +157,7 @@ def restore_table(params):
                                       host=host_name,
                                       port=port,
                                       database=database_name)
-        update_schema_name = "ALTER SCHEMA "+ file +" RENAME TO "+changedSchemaName
+        update_schema_name = "ALTER SCHEMA "+ main_schema +" RENAME TO "+changedSchemaName
         cursor = connection.cursor()
         cursor.execute(update_schema_name)
         connection.commit()
