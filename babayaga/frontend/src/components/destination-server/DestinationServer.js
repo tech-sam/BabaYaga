@@ -4,6 +4,9 @@ import Axios from 'axios';
 import SchemaListComponent from "../schema-list/SchemaListComponent";
 import { getBaseUrl } from "../../global";
 import CustomModal from "../modal/modal"
+import Button from "react-bootstrap/Button";
+import "./DestinationServer.scss";
+import destinationDefault from '../../static-data/static-destination-data.json';
 
 
 const formName = 'Destination'
@@ -16,8 +19,7 @@ class DestinationServer extends Component {
         this.state = {
             response: {},
             loadingPage: false,
-            showModal: false
-        }
+            showModal: false        }
         this.formValue = {};
         this.submited = false;
         this.handleChange = this.handleChange.bind(this);
@@ -25,6 +27,7 @@ class DestinationServer extends Component {
         this.createSource = this.createSource.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
         this.onHideModal = this.onHideModal.bind(this);
+        this.setDefaultValue = this.setDefaultValue.bind(this);
         this.requestData = {};
          this.httpClient = Axios.create();
         this.httpClient.defaults.timeout = 6000000;
@@ -72,29 +75,40 @@ class DestinationServer extends Component {
                     return this.createSource();
                 })
                 .then(() => {
-                    this.setState({ ...this.state, loadingPage: false });
+                    this.setState({ ...this.state, loadingPage: false});
                 });
         }
         else {
             this.setState({ showModal: false });
         }
     }
+    setDefaultValue() {
+        this.submited = true;
+        this.setState({ ...this.state, response: destinationDefault });
+        
+    }
     render() {
         if (!this.submited) {
             return (
-                <FormComponent
-                    formName={formName}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                    data={this.state}
-                />
+                <div>
+                    <Button className="btn-default" onClick={evt => { this.setDefaultValue(); }}>
+                        Default Destination Database
+                    </Button>
+                    <FormComponent
+                        formName={formName}
+                        handleChange={this.handleChange}
+                        handleSubmit={this.handleSubmit}
+                        data={this.state}
+                    />
+
+                </div>
             );
         }
         else {
             return (
                 <div onDragOver={(event) => event.preventDefault()} onDrop={(e) => this.onDragOver(e)}>
                     <SchemaListComponent formName={formName} formValue={this.formValue} schemaList={this.state.response} isLoading={this.state.loadingPage}></SchemaListComponent>
-                    <CustomModal show={this.state.showModal}  onHide={(val) => this.onHideModal(val)}></CustomModal>
+                    <CustomModal show={this.state.showModal} onHide={(val) => this.onHideModal(val)}></CustomModal>
                 </div>
                 
             );
