@@ -85,10 +85,20 @@ def pgDump(params, pgRestoreParams):
     user_name = params['userName']
     password = params['password']
     schema_name = params['schemaName']
+    env_path = os.environ.get('DUMP_PATH')
+    print("env path "+env_path)
+    path_to_file = ""
+    if not env_path:
+        print("coming to if")
+        path_to_file = "/opt/schema-dest/"+schema_name+".dmp"
+    else:
+       print("coming to else")
+       path_to_file = env_path+"/"+schema_name+".dmp" 
+    print("path to file "+path_to_file)
     # command = 'pg_dump -h {0} -d {1} -U {2} -p {3} -n {4} -Fc -f {4}.dmp'\
     #     .format(host_name, database_name, user_name, port, schema_name)
-    command = 'pg_dump  --dbname=postgresql://{2}:{5}@{0}:{3}/{1}  -n {4} -Fc -f {4}.dmp'\
-        .format(host_name, database_name, user_name, port, schema_name, password)
+    command = 'pg_dump  --dbname=postgresql://{2}:{5}@{0}:{3}/{1}  -n {4} -Fc -f {6}'\
+        .format(host_name, database_name, user_name, port, schema_name, password,path_to_file)
 
     p = Popen(command, shell=True, stdin=PIPE,
               stdout=PIPE, stderr=PIPE, encoding='utf8')
@@ -241,3 +251,5 @@ def getSchemas(request):
             connection.close()
             print("PostgreSQL connection is closed")
             return JsonResponse(schema_list, safe=False)
+
+
