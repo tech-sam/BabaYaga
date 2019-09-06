@@ -97,6 +97,11 @@ def pgDump(params, pgRestoreParams):
     p_status = p.wait()
     print(p_status)
     print(outs)
+    changedFileName = pgRestoreParams['updatedSchemaName']
+   
+    print("--path for actual file ----"+schema_name+".dmp")
+    print("--path for changed file ----"+changedFileName+".dmp")
+   
     if(True == params['restoreSchema']):
         restore_table(pgRestoreParams)
     if(True == params['s3Upload']):
@@ -113,10 +118,10 @@ def restore_table(params):
     user_name = params['userName']
     database_password = params['password']
     file = params['schemaName']
-    changedFileName = params['updatedSchemaName']
+    changedSchemaName = params['updatedSchemaName']
+    print("file to be restore pg_restore "+file)
 	
-    os.rename(file,changedFileName+".dmp")
-    print("--path for restore file ----")
+    
     cwd = os.getcwd()
     files = os.listdir(cwd)
     print("Files in %r: %s" % (cwd, files))
@@ -125,7 +130,7 @@ def restore_table(params):
     #           .format(host_name, database_name, user_name, port, file)
 
     command = 'pg_restore -j 8 --dbname=postgresql://{2}:{5}@{0}:{3}/{1} {4}.dmp'\
-              .format(host_name, database_name, user_name, port, changedFileName, database_password)
+              .format(host_name, database_name, user_name, port, file, database_password)
 
     command = shlex.split(command)
 
@@ -133,6 +138,28 @@ def restore_table(params):
     p = Popen(command, shell=False, stdin=PIPE,
               stdout=PIPE, stderr=PIPE, encoding='utf8')
     (outs, errs) = p.communicate('{}\n'.format(database_password))
+    try:
+        connection = psycopg2.connect(user=user_name,
+                                      password=database_password,
+                                      host=host_name,
+                                      port=port,
+                                      database=database_name)
+        update_schema_name = "ALTER SCHEMA "+ file +" RENAME TO "+changedSchemaName
+        cursor = connection.cursor()
+        cursor.execute(update_schema_name)
+        connection.commit()
+        count = cursor.rowcount
+        print(schema, "Record Updated successfully ")
+    except (Exception, psycopg2.Error) as error:
+        print("Error while fetching data from PostgreSQL", error)
+    finally:
+        # closing database connection.
+        if(connection):
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+            
+
     p_status = p.wait()
     print(p_status)
     print(outs)
