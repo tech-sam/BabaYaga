@@ -1,0 +1,272 @@
+[
+  {
+    "key": 0,
+    "schemaName": "gt_capital2",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 1,
+    "schemaName": "gt_capital3",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 2,
+    "schemaName": "gt_capital",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 3,
+    "schemaName": "gt_capital4",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 4,
+    "schemaName": "gt_capital1",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 5,
+    "schemaName": "gt_capital5",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 6,
+    "schemaName": "gt_payasia",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 7,
+    "schemaName": "gt_payasia1",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 8,
+    "schemaName": "gt_payasia2",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 9,
+    "schemaName": "gt_centumelectronicslim_centumel",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 10,
+    "schemaName": "gt_payasia3",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 11,
+    "schemaName": "gt_payasia4",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 12,
+    "schemaName": "gt_payasia5",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 13,
+    "schemaName": "gt_augustpurple",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 14,
+    "schemaName": "gt_tmfgroup_invlor_chromaflo",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 15,
+    "schemaName": "gt_demo_masterdemo5",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 16,
+    "schemaName": "gt_demo_budget",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 17,
+    "schemaName": "gt_demo_masterdemo4",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 18,
+    "schemaName": "public",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 19,
+    "schemaName": "gt_augustpurpleservices_augustpurple",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 20,
+    "schemaName": "gt_pacehrinnovationspvt_pacecareerkothrud1",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 21,
+    "schemaName": "gt_easternbearingspriva_easternbearings",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 22,
+    "schemaName": "gt_demo_masterdemo18",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 23,
+    "schemaName": "gt_oneviewhr_tatggu_iragecapital",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 24,
+    "schemaName": "gt_demo_masterdemo12",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 25,
+    "schemaName": "gt_pvoithaerospacepvtlt_p3",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 26,
+    "schemaName": "gt_mseducationalandwelf_mseducational",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 27,
+    "schemaName": "gt_odessasolutionspvtlt_odessa",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 28,
+    "schemaName": "gt_haysspecialistrecrui_hays",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  },
+  {
+    "key": 29,
+    "schemaName": "gt_scmassociates_auwexk_abcmanagcons",
+    "hostName": "192.168.3.231",
+    "port": "6432",
+    "databaseName": "public_backups",
+    "userName": "majordomo",
+    "password": "sa"
+  }
+]
